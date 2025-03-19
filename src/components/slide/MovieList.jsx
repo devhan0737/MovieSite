@@ -5,6 +5,24 @@ import { Swiper, SwiperSlide } from "swiper/react"; // React용 Swiper 컴포넌
 import styled from "styled-components";
 import "swiper/css";
 
+// 장르 ID와 이름 매핑
+const genreMap = {
+  28: "액션",
+  12: "모험",
+  35: "코미디",
+  53: "스릴러",
+  80: "범죄",
+  18: "드라마",
+  10751: "가족",
+  14: "판타지",
+  27: "공포",
+  10749: "로맨스",
+  878: "SF",
+  10770: "TV 영화",
+  10752: "전쟁",
+  37: "서부",
+};
+
 const Container = styled.div`
   width: 100%;
   max-width: 1280px;
@@ -14,6 +32,10 @@ const Container = styled.div`
   h2 {
     font-size: 2rem;
   }
+`;
+
+const CategoryWrapper = styled.div`
+  margin-top: 20px;
 `;
 
 const MovieWrapper = styled.div`
@@ -54,6 +76,15 @@ const MovieList = () => {
     queryFn: () => fetchMovies(),
   });
 
+  // 영화 데이터를 장르별로 묶기
+  const categorizedMovies = movies?.reduce((acc, movie) => {
+    movie.genre_ids.forEach((genreId) => {
+      if (!acc[genreId]) acc[genreId] = [];
+      acc[genreId].push(movie);
+    });
+    return acc;
+  }, {});
+
   useEffect(() => {
     if (movies) {
       console.log("📌 API에서 가져온 영화 데이터:", movies);
@@ -67,47 +98,46 @@ const MovieList = () => {
     <Container>
       <h2>🔥🔥 지금 뜨는 영화!! </h2>
 
-      <MovieWrapper>
-        <Swiper
-          spaceBetween={30} // 슬라이드 사이의 간격
-          slidesPerView={7} // 한 화면에 보일 슬라이드 개수를 1로 설정
-          navigation // 좌/우 버튼을 사용하려면 이 옵션을 활성화
-          loop // 끝까지 갔을 때 다시 처음으로 돌아가게
-          breakpoints={{
-            320: {
-              slidesPerView: 1.4, // 모바일 화면에서 슬라이드 1개
-              centeredSlides: true, // 모바일에서만 센터로
-            },
-            480: {
-              slidesPerView: 2, // 작은 화면에서 슬라이드 2개
-              centeredSlides: true, // 작은 화면에서만 센터로
-            },
-            768: {
-              slidesPerView: 3, // 태블릿에서 슬라이드 3개
-              centeredSlides: true, // 태블릿에서도 센터로
-            },
-            1024: {
-              slidesPerView: 6, // 데스크탑에서 슬라이드 5개
-              centeredSlides: false, // 1024 이상에서는 기본 값 (센터 안됨)
-            },
-          }}
-        >
-          {movies?.map((movie) => {
-            const posterUrl = movie.poster_path
-              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-              : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"; // 대체 이미지
+      {/* 카테고리별 영화 리스트를 표시 */}
+      {Object.keys(categorizedMovies || {}).map((categoryId) => {
+        const categoryMovies = categorizedMovies[categoryId];
+        const categoryName = genreMap[categoryId] || "알 수 없음"; // 장르 이름 매핑
 
-            return (
-              <MovieSwiper key={movie.id}>
-                <Movie>
-                  <img src={posterUrl} alt={movie.title} width="100%" />
-                  <p>{movie.title}</p>
-                </Movie>
-              </MovieSwiper>
-            );
-          })}
-        </Swiper>
-      </MovieWrapper>
+        return (
+          <CategoryWrapper key={categoryId}>
+            <h3>{categoryName}</h3> {/* 장르 이름을 출력 */}
+            <MovieWrapper>
+              <Swiper
+                spaceBetween={30}
+                slidesPerView={7}
+                navigation
+                loop
+                breakpoints={{
+                  320: { slidesPerView: 1.4, centeredSlides: true },
+                  480: { slidesPerView: 2, centeredSlides: true },
+                  768: { slidesPerView: 3, centeredSlides: true },
+                  1024: { slidesPerView: 6, centeredSlides: false },
+                }}
+              >
+                {categoryMovies.map((movie) => {
+                  const posterUrl = movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
+
+                  return (
+                    <MovieSwiper key={movie.id}>
+                      <Movie>
+                        <img src={posterUrl} alt={movie.title} width="100%" />
+                        <p>{movie.title}</p>
+                      </Movie>
+                    </MovieSwiper>
+                  );
+                })}
+              </Swiper>
+            </MovieWrapper>
+          </CategoryWrapper>
+        );
+      })}
     </Container>
   );
 };
