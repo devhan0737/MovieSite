@@ -1,0 +1,84 @@
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/Pretendard-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/Pretendard-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/Pretendard-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Pretendard";
+  src: url("../assets/fonts/Pretendard-Black.woff") format("woff");
+  font-weight: 900;
+  font-style: normal;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+  font-size: 62.5%;
+  box-sizing: border-box;
+  line-height: 1.2;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: none;
+  -ms-content-zooming: none;
+  -ms-touch-action: pan-x pan-y;
+  touch-action: pan-x pan-y;
+  text-size-adjust: none;
+}
+
+body {
+  min-height: 100%;
+  box-sizing: border-box;
+  font-family: "Pretendard", sans-serif;
+  font-size: 1.6rem;
+  padding: 0;
+  margin: 0;
+  word-break: keep-all;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul {
+  font-size: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+button {
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  background: inherit;
+}
