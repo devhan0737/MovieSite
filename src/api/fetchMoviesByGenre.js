@@ -12,6 +12,6 @@ export const fetchMoviesByGenre = async (genreId) => {
       page: 1, // 1페이지만 가져오기
     },
   });
-
+  // console.log("API 응답 데이터:", response.data.results);
   return response.data.results;
 };
