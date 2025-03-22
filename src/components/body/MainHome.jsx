@@ -8,10 +8,11 @@ const Container = styled.section`
   display: flex;
   gap: 20px; /* 사이드바와 콘텐츠 간의 간격 */
   background: #222020;
-  padding: 0 4%;
+  padding: 20px 4% 0;
   justify-content: center;
 `;
 const Contents = styled.section`
+  padding-top: 64px;
   max-width: 1280px;
   width: 100%;
   /* padding: 0 20px; */

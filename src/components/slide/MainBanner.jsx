@@ -5,9 +5,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { mq } from "../../lib/media-query/mediaQuery";
 
 const Container = styled.div`
   width: 100%;
+  color: #fff;
+  h2 {
+    font-size: 2rem;
+    height: 40px;
+    ${mq("desktop")} {
+      padding: 0;
+    }
+  }
 `;
 const SwiperBox = styled.div`
   width: 100%;

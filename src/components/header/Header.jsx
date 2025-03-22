@@ -5,6 +5,7 @@ import user from "../../assets/img/user-3-line.svg";
 import search from "../../assets/img/search-line.svg";
 
 const Container = styled.header`
+  position: fixed;
   width: 100%;
   display: flex;
   align-items: center;
