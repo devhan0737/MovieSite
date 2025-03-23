@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { mq } from "./../../lib/media-query/mediaQuery";
 import user from "../../assets/img/user-3-line.svg";
 import search from "../../assets/img/search-line.svg";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.header`
+  z-index: 4;
   position: fixed;
   width: 100%;
   display: flex;
@@ -25,7 +27,9 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const Logo = styled.h1``;
+const Logo = styled.h1`
+  cursor: pointer;
+`;
 const RightContents = styled.div`
   display: flex;
   gap: 8px;
@@ -41,10 +45,16 @@ const RightContents = styled.div`
 `;
 
 const Header = () => {
+  const navigate = useNavigate(); // useNavigate 훅 사용
+
+  const handleMovieClick = () => {
+    navigate(`/`); // 영화 클릭 시 상세 페이지로 이동
+  };
+
   return (
     <Container>
       <Wrapper>
-        <Logo>MOVIE</Logo>
+        <Logo onClick={handleMovieClick}>MOVIE</Logo>
         <RightContents>
           <a href="#">
             <img src={search} alt="돋보기 아이콘" />

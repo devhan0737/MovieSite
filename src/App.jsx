@@ -1,7 +1,7 @@
 import Header from "./components/header/Header";
 import MainHome from "./components/body/MainHome";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import MovieDetail from "./page/MovieDetail";
+import MovieDetail from "./page/MovieDtail/MovieDetail";
 
 function App() {
   return (
