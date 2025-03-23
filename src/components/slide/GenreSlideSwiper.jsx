@@ -1,55 +1,73 @@
+// components/GenreSlideSwiper.jsx
 import React from "react";
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { Swiper, SwiperSlide } from "swiper/react"; // React 컴포넌트로 Swiper, SwiperSlide 임포트
-import "swiper/css"; // 스타일 불러오기
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 import { fetchMoviesByGenre } from "../../api/fetchMoviesByGenre";
 import { mq } from "../../lib/media-query/mediaQuery";
+import { useNavigate } from "react-router-dom";
 
+// ✅ 스타일 설정
 const Container = styled.div`
   width: 100%;
   color: #fff;
+
   h2 {
     font-size: 2rem;
-    height: 40px;
+    margin-bottom: 10px;
     ${mq("desktop")} {
       padding: 0;
     }
   }
 `;
+
 const SwiperBox = styled.div`
   position: relative;
-  top: 0;
-  left: 0;
+  overflow: hidden;
+
+  .swiper,
+  .swiper-slide {
+    overflow: visible;
+  }
 `;
 
 const MovieSwiper = styled(SwiperSlide)`
-  width: 100%;
+  transition: transform 0.3s ease;
+  z-index: 1;
+
+  &:hover {
+    transform: scale(1.08);
+    z-index: 10;
+  }
 `;
 
 const Movie = styled.div`
+  padding: 20px 0;
   width: 100%;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   img {
     width: 100%;
-    height: auto; /* 비율을 유지하면서 너비에 맞춰 높이 자동 조정 */
-    max-width: 100%;
-    max-height: 100%;
-    min-height: 300px;
+    height: auto;
+    max-height: 300px;
     border-radius: 10px;
   }
+
   p {
     text-align: center;
     margin-top: 10px;
     font-size: 16px;
     font-weight: bold;
-    white-space: normal;
     word-wrap: break-word;
-    overflow-wrap: break-word;
   }
 `;
 
 const GenreSlideSwiper = ({ name, id }) => {
-  // console.log("Genre ID:", id);
+  const navigate = useNavigate();
 
   const {
     data: movieListByGenre,
@@ -59,11 +77,9 @@ const GenreSlideSwiper = ({ name, id }) => {
     enabled: !!id,
   });
 
-  React.useEffect(() => {
-    if (movieListByGenre) {
-      console.log("Fetched Movies:", movieListByGenre);
-    }
-  }, [movieListByGenre]);
+  const handleClick = (movieId) => {
+    navigate(`/movie/${movieId}`);
+  };
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
@@ -73,9 +89,8 @@ const GenreSlideSwiper = ({ name, id }) => {
       <h2>{name}</h2>
       <SwiperBox>
         <Swiper
-          spaceBetween={30}
-          slidesPerView={7}
-          navigation
+          spaceBetween={40}
+          slidesPerView={6}
           loop
           breakpoints={{
             320: { slidesPerView: 1.4, centeredSlides: true },
@@ -91,8 +106,8 @@ const GenreSlideSwiper = ({ name, id }) => {
 
             return (
               <MovieSwiper key={`${movie.id}-${index}`}>
-                <Movie>
-                  <img src={posterUrl} alt={movie.title} width="100%" />
+                <Movie onClick={() => handleClick(movie.id)}>
+                  <img src={posterUrl} alt={movie.title} />
                   <p>{movie.title}</p>
                 </Movie>
               </MovieSwiper>

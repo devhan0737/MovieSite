@@ -12,7 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   ${mq("desktop")} {
-    gap: 80px;
+    gap: 20px;
   }
 `;
 

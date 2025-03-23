@@ -28,6 +28,12 @@ const Detail = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  :last-child {
+    border: none;
+  }
+  :first-child {
+    padding-top: 0;
+  }
 `;
 
 const MovieDetialBox = ({ movie, genres, cast }) => {

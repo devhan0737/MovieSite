@@ -12,7 +12,6 @@ const Container = styled.div`
   color: #fff;
   h2 {
     font-size: 2rem;
-    height: 40px;
     ${mq("desktop")} {
       padding: 0;
     }
@@ -21,7 +20,16 @@ const Container = styled.div`
 const SwiperBox = styled.div`
   width: 100%;
 `;
+const MovieSwiper = styled(SwiperSlide)`
+  transition: transform 0.3s ease;
+  z-index: 1;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+`;
 const Movie = styled.div`
+  padding: 20px 0;
   width: 100%;
   img {
     width: 100%;
@@ -85,7 +93,7 @@ const MainBanner = () => {
               : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg";
 
             return (
-              <SwiperSlide
+              <MovieSwiper
                 key={`${movie.id}-${index}`}
                 onClick={() => handleMovieClick(movie.id)}
               >
@@ -93,7 +101,7 @@ const MainBanner = () => {
                   <img src={posterUrl} alt={movie.title} width="100%" />
                   <p>{movie.title}</p>
                 </Movie>
-              </SwiperSlide>
+              </MovieSwiper>
             );
           })}
         </Swiper>

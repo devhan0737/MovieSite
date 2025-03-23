@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import MovieGenreList from "../slide/MovieGenreList";
 import MainBanner from "../slide/MainBanner";
+import { mq } from "../../lib/media-query/mediaQuery";
 
 const Container = styled.section`
   width: 100%;
@@ -9,6 +10,7 @@ const Container = styled.section`
   gap: 20px; /* 사이드바와 콘텐츠 간의 간격 */
   background: #222020;
   padding: 20px 4% 0;
+  overflow: hidden;
   justify-content: center;
 `;
 const Contents = styled.section`
@@ -19,6 +21,7 @@ const Contents = styled.section`
   display: flex;
   align-items: center;
   flex-direction: column;
+  gap: 20px;
 `;
 
 const MainHome = () => {
