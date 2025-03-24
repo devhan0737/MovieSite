@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import MovieGenreList from "../slide/MovieGenreList";
 import MainBanner from "../slide/MainBanner";
-import { mq } from "../../lib/media-query/mediaQuery";
 
 const Container = styled.section`
   width: 100%;

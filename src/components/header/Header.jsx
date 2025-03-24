@@ -47,19 +47,22 @@ const RightContents = styled.div`
 const Header = () => {
   const navigate = useNavigate(); // useNavigate 훅 사용
 
-  const handleMovieClick = () => {
+  const handleLogoClick = () => {
     navigate(`/`); // 영화 클릭 시 상세 페이지로 이동
+  };
+  const handleMovieClick = () => {
+    navigate(`/login`); // 영화 클릭 시 상세 페이지로 이동
   };
 
   return (
     <Container>
       <Wrapper>
-        <Logo onClick={handleMovieClick}>MOVIE</Logo>
+        <Logo onClick={handleLogoClick}>MOVIE</Logo>
         <RightContents>
           <a href="#">
             <img src={search} alt="돋보기 아이콘" />
           </a>
-          <a href="#">
+          <a href="#" onClick={handleMovieClick}>
             <img src={user} alt="유저 아이콘" />
           </a>
         </RightContents>
