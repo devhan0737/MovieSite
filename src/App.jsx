@@ -3,8 +3,14 @@ import MainHome from "./components/body/MainHome";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import MovieDetail from "./page/moviedetailpage/MovieDetail";
 import Login from "./page/loginpage/Login";
+import { initKakao } from "./api/kakaoLogin";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    initKakao();
+  }, []);
+
   return (
     <Router>
       <Header />

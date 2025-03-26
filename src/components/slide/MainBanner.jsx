@@ -34,9 +34,9 @@ const Movie = styled.div`
   img {
     width: 100%;
     height: auto;
+    min-height: 280px;
     max-width: 100%;
     max-height: 100%;
-    min-height: 300px;
     border-radius: 10px;
   }
   p {

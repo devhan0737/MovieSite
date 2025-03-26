@@ -53,6 +53,7 @@ const Movie = styled.div`
   img {
     width: 100%;
     height: auto;
+    min-height: 280px;
     max-height: 300px;
     border-radius: 10px;
   }
