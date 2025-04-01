@@ -4,14 +4,17 @@ import "./style/basic.css";
 import App from "./App.jsx";
 import { QueryClientProvider } from "react-query";
 import { QueryClient } from "./../node_modules/react-query/es/core/queryClient";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/* QueryClientProvider로 감싸서 React Query를 사용 가능하게 만들기 */}
+    {/* React Query와 GoogleOAuthProvider로 앱을 감싸기 */}
     <QueryClientProvider client={queryClient}>
-      <App />
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <App />
+      </GoogleOAuthProvider>
     </QueryClientProvider>
   </StrictMode>
 );

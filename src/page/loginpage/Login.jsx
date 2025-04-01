@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { initGoogleLogin } from "../../api/googleLogin";
 import kakaoLogo from "../../assets/img/kakaoLogo.svg";
 import googleLogo from "../../assets/img/googleLogo.svg";
 import { handleKakaoLogin } from "../../api/kakaoLogin";
+import { jwtDecode } from "jwt-decode";
 
-// 페이지 전체 배경
+// 스타일 정의
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -15,7 +15,6 @@ const Container = styled.div`
   padding: 64px 4% 0;
 `;
 
-// 콘텐츠 박스
 const Contents = styled.div`
   margin: 0 auto;
   padding-top: 40px;
@@ -27,7 +26,6 @@ const Contents = styled.div`
   gap: 40px;
 `;
 
-// SNS 로그인 박스
 const SnsLoginBox = styled.div`
   width: 100%;
   display: flex;
@@ -36,7 +34,6 @@ const SnsLoginBox = styled.div`
   align-items: center;
 `;
 
-// 카카오 버튼
 const KakaoBtn = styled.button`
   max-width: 337px;
   display: flex;
@@ -55,9 +52,9 @@ const KakaoBtn = styled.button`
     height: 24px;
   }
 `;
+
 const GoogleBtn = styled.button`
   max-width: 337px;
-
   display: flex;
   gap: 8px;
   align-items: center;
@@ -69,25 +66,44 @@ const GoogleBtn = styled.button`
   background: #fff;
   color: #000;
   border-radius: 12px;
-
   img {
     width: 24px;
     height: 24px;
   }
 `;
+
 const Login = () => {
   const navigate = useNavigate();
 
+  // ✅ 구글 SDK 초기화
   useEffect(() => {
-    // ✅ 구글 로그인 초기화 호출
-    initGoogleLogin(handleGoogleLogin);
+    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+    if (window.google && clientId) {
+      window.google.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleLogin,
+      });
+      console.log("✅ Google SDK 초기화 완료");
+    } else {
+      console.warn("❌ Google SDK 또는 client_id 없음");
+    }
   }, []);
 
+  // ✅ 구글 로그인 성공 시 처리
   const handleGoogleLogin = (response) => {
-    console.log("✅ 구글 로그인 성공!");
-    console.log("🪙 JWT Token:", response.credential);
+    if (!response.credential) {
+      console.warn("❌ 구글 로그인 실패: credential 없음");
+      return;
+    }
 
-    // 여기서 navigate("/home") 같은 이동도 가능
+    const token = response.credential;
+    const user = jwtDecode(token);
+
+    console.log("👤 Google 사용자 정보:", user);
+
+    localStorage.setItem("user", JSON.stringify(user));
+    navigate("/");
   };
 
   return (
@@ -103,8 +119,19 @@ const Login = () => {
             카카오로 로그인
           </KakaoBtn>
 
-          {/* 구글 로그인 버튼 자리 */}
-          <GoogleBtn onClick={() => window.google.accounts.id.prompt()}>
+          {/* 구글 로그인 */}
+          <GoogleBtn
+            onClick={() =>
+              window.google.accounts.id.prompt((notification) => {
+                if (
+                  notification.isNotDisplayed() ||
+                  notification.isSkippedMoment()
+                ) {
+                  console.warn("❌ Google 로그인 취소 또는 표시 안 됨");
+                }
+              })
+            }
+          >
             <img src={googleLogo} alt="구글 로고" />
             구글로 로그인
           </GoogleBtn>
