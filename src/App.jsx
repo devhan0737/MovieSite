@@ -5,6 +5,8 @@ import MainHome from "./components/body/MainHome";
 import MovieDetail from "./page/moviedetailpage/MovieDetail";
 import Login from "./page/loginpage/Login";
 import { initKakao } from "./api/kakaoLogin"; // ✅ 카카오는 유지
+import GoogleRedirectCallback from "./page/loginpage/GoogleRedirectCallback";
+import Footer from "./components/footer/Footer";
 
 function App() {
   useEffect(() => {
@@ -22,9 +24,11 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<MainHome />} />
+        <Route path="/google-callback" element={<GoogleRedirectCallback />} />
         <Route path="/movie/:id" element={<MovieDetail />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      <Footer />
     </Router>
   );
 }

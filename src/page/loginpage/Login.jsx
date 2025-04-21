@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import kakaoLogo from "../../assets/img/kakaoLogo.svg";
 import googleLogo from "../../assets/img/googleLogo.svg";
 import { handleKakaoLogin } from "../../api/kakaoLogin";
-import { jwtDecode } from "jwt-decode";
 
-// 스타일 정의
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -74,37 +72,31 @@ const GoogleBtn = styled.button`
 
 const Login = () => {
   const navigate = useNavigate();
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const redirectUri = `${window.location.origin}/google-callback`;
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  // ✅ 구글 SDK 초기화
+  const handleGoogleLoginClick = () => {
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token id_token&scope=openid%20email%20profile&nonce=abc123`;
+    window.location.href = url;
+  };
+
   useEffect(() => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-
-    if (window.google && clientId) {
+    // 데스크탑일 경우 FedCM prompt()로 자동 로그인 유도할 수 있음
+    if (!isMobile && window.google && clientId) {
       window.google.accounts.id.initialize({
         client_id: clientId,
-        callback: handleGoogleLogin,
+        callback: (response) => {
+          const token = response.credential;
+          if (token) {
+            const user = jwtDecode(token);
+            localStorage.setItem("user", JSON.stringify(user));
+            navigate("/");
+          }
+        },
       });
-      console.log("✅ Google SDK 초기화 완료");
-    } else {
-      console.warn("❌ Google SDK 또는 client_id 없음");
     }
   }, []);
-
-  // ✅ 구글 로그인 성공 시 처리
-  const handleGoogleLogin = (response) => {
-    if (!response.credential) {
-      console.warn("❌ 구글 로그인 실패: credential 없음");
-      return;
-    }
-
-    const token = response.credential;
-    const user = jwtDecode(token);
-
-    console.log("👤 Google 사용자 정보:", user);
-
-    localStorage.setItem("user", JSON.stringify(user));
-    navigate("/");
-  };
 
   return (
     <Container>
@@ -113,25 +105,12 @@ const Login = () => {
         <p>SNS 계정으로 간편하게 로그인 하세요.</p>
 
         <SnsLoginBox>
-          {/* 카카오 로그인 */}
           <KakaoBtn onClick={() => handleKakaoLogin(navigate)}>
             <img src={kakaoLogo} alt="카카오 로고" />
             카카오로 로그인
           </KakaoBtn>
 
-          {/* 구글 로그인 */}
-          <GoogleBtn
-            onClick={() =>
-              window.google.accounts.id.prompt((notification) => {
-                if (
-                  notification.isNotDisplayed() ||
-                  notification.isSkippedMoment()
-                ) {
-                  console.warn("❌ Google 로그인 취소 또는 표시 안 됨");
-                }
-              })
-            }
-          >
+          <GoogleBtn onClick={handleGoogleLoginClick}>
             <img src={googleLogo} alt="구글 로고" />
             구글로 로그인
           </GoogleBtn>
